@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group Redirect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SB5HF0KB7T"></script>
+    <script>
+        // Initialize Google Analytics
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        // Configure Google Analytics
+        gtag('config', 'G-SB5HF0KB7T', {
+            'anonymize_ip': true
+        });
+
+        // Parse URL parameters
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Tracking and Redirect Function
+        function trackAndRedirect() {
+            // Collect key parameters
+            const params = {
+                'redirect_url': getQueryParam('redirect_url'),
+                'source': getQueryParam('source') || 'unknown'
+            };
+
+            // Validate redirect URL
+            if (!params.redirect_url) {
+                alert('Error: No destination URL specified');
+                return;
+            }
+
+            // Track the redirect event
+            gtag('event', 'redirect', {
+                'event_category': 'Group Redirect',
+                'event_label': params.source,
+                'transport_type': 'beacon'
+            });
+
+            // Redirect after a short delay to ensure tracking
+            setTimeout(() => {
+                try {
+                    window.location.href = decodeURIComponent(params.redirect_url);
+                } catch (error) {
+                    console.error('Redirect failed:', error);
+                    alert('Failed to redirect. Please check the URL.');
+                }
+            }, 200);
+        }
+
+        // Run tracking when page loads
+        window.addEventListener('load', trackAndRedirect);
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .loading-container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <h1>Redirecting...</h1>
+        <p>Please wait while we process your request.</p>
+    </div>
+</body>
+</html>
